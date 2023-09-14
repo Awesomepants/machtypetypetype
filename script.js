@@ -234,7 +234,7 @@ const targetWPM = 9;
           console.log("startGame");
           startingText.destroy();
           modal("Get ready!",3000,()=>{
-            infiniteMode(70);
+            infiniteMode(60);
           })
           this.input.keyboard.removeListener("keydown", startGame);
         }
