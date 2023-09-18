@@ -1,0 +1,7 @@
+@font-face {
+    font-family: rainbow;
+    src: url(Rainbow2000.ttf);
+}
+h1 {
+    font-family: rainbow;
+}
