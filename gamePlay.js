@@ -1,7 +1,6 @@
 class gameplayScene extends Phaser.Scene{
     constructor(){
         super({
-           
            key:"gameplayScene"
         });
     }
@@ -52,7 +51,8 @@ class gameplayScene extends Phaser.Scene{
   create() {
     //put these somewhere else?
     const words = ["mississippi","nor", "double", "seat", "arrive", "master", "track", "parent", "shore", "division", "sheet", "substance", "favor", "connect", "post", "spend", "chord", "fat", "glad", "original", "share", "station", "dad", "bread", "charge", "proper", "bar", "offer", "segment", "slave", "duck", "instant", "market", "degree", "populate", "chick", "dear", "enemy", "reply", "drink", "occur", "support", "speech", "nature", "range", "steam", "motion", "path", "liquid", "log", "meant", "quotient", "teeth", "shell", "neck", "oxygen", "sugar", "death", "pretty", "skill", "women", "season", "solution", "magnet", "silver", "thank", "branch", "match", "suffix", "especially", "fig", "afraid", "huge", "sister", "steel", "discuss", "forward", "similar", "guide", "experience", "score", "apple", "bought", "led", "pitch", "coat", "mass", "card", "band", "rope", "slip", "win", "dream", "evening", "condition", "feed", "tool", "total", "basic", "smell", "valley"];
-    const targetWPM = 9;
+    this.WPMs = [];
+    this.accuracies = [];
     this.finishedEmitter = new Phaser.Events.EventEmitter();
            this.gameEnded = false;
           
@@ -229,7 +229,10 @@ class gameplayScene extends Phaser.Scene{
             this.currentTextObject.x -= 15;
           })
           this.finishedEmitter.on("Finished", (WPM, accuracy) => {
+            
             if(!this.gameEnded){
+               this.WPMs.push(WPM);
+                this.accuracies.push(accuracy); 
               this.modal("WPM: " + Math.floor(WPM) + " Accuracy: " + Math.floor(accuracy*100) + "%", 3000, again);
           
             }
@@ -255,7 +258,22 @@ class gameplayScene extends Phaser.Scene{
             this.gameEnded = true;
             this.finishedEmitter.emit("loss");
             console.log("running this code again...");
-            this.modal("Wowie wowie good job Joe Schmoe",5000,()=>{
+            const average = (array)=>{
+                var total = 0;
+                for(var i = 0; i < array.length; i++) {
+                    total += array[i];
+                }
+                return total / array.length;
+            }
+            const averageWPM = Math.floor(average(this.WPMs));
+            const averageAccuracy = Math.floor(average(this.accuracies) * 100);
+            let message = "";
+            if(averageWPM){
+                message = `Game over. Average WPM: ${averageWPM} Average accuracy: ${averageAccuracy}%`;
+            } else {
+                message = "It seems like this was too hard for you! Try a slower speed?"
+            }
+            this.modal(message,5000,()=>{
                 this.scene.start("menuScene")
             });
           }

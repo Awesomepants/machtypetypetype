@@ -1,6 +1,6 @@
-ending screen
+ending screen DONE
 fullscreen option
-difficulty level (WPM of letters is WPM of user *0.75)
+difficulty level (WPM of letters is WPM of user *0.75) DONE
 "|" confusing
 
-Phaser starts scenes in reverse order and I don't know what to do
+Phaser starts scenes in reverse order and I don't know what to do RESOLVED

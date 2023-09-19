@@ -4,7 +4,8 @@ class menuScene extends Phaser.Scene{
         super({ key: 'menuScene' });
     }
     preload(){
-        this.load.image("WPMSelector","button.png")
+        this.load.image("WPMSelector","button.png");
+        this.load.image("fullscreen","full-screen-button.png");
     }
     init(){}
     create(){
@@ -25,7 +26,26 @@ class menuScene extends Phaser.Scene{
             wpmDisplay.text = `WPM: ${WPM} (Drag to adjust)`;
             wpmDisplay.updateText();
         })
-        
+        const button = this.add.image(config.width - 50, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+        button.setScale(0.2);
+
+        button.on('pointerup', function ()
+        {
+
+            if (this.scale.isFullscreen)
+            {
+                button.setFrame(0);
+
+                this.scale.stopFullscreen();
+            }
+            else
+            {
+                button.setFrame(1);
+
+                this.scale.startFullscreen();
+            }
+
+        }, this);
         const startingText = this.add.text(
             350,
             300,
