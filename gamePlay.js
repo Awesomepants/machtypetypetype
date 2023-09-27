@@ -9,7 +9,13 @@ class gameplayScene extends Phaser.Scene{
     console.log("init", data.wpm);
     this.wpm = data.wpm
   }
+  preload(){
+    this.load.image("redX","redX.png");
+    this.load.audio("wrong-answer","wrong-answer.wav");
+    this.load.audio("bgm","POL-net-bots-short.wav");
+  }
   modal(modalText, miliseconds, andThen){
+    //is this creating a new graphics object every time this function is called?!?!?! We need to change this at some point
     const modalBackgrounds = this.add.graphics();
     modalBackgrounds.fillStyle(0x2d2d2d, 0.5);
     const modalTextObject = this.add.text(
@@ -50,16 +56,20 @@ class gameplayScene extends Phaser.Scene{
   
   create() {
     //put these somewhere else?
-    const words = ["mississippi","nor", "double", "seat", "arrive", "master", "track", "parent", "shore", "division", "sheet", "substance", "favor", "connect", "post", "spend", "chord", "fat", "glad", "original", "share", "station", "dad", "bread", "charge", "proper", "bar", "offer", "segment", "slave", "duck", "instant", "market", "degree", "populate", "chick", "dear", "enemy", "reply", "drink", "occur", "support", "speech", "nature", "range", "steam", "motion", "path", "liquid", "log", "meant", "quotient", "teeth", "shell", "neck", "oxygen", "sugar", "death", "pretty", "skill", "women", "season", "solution", "magnet", "silver", "thank", "branch", "match", "suffix", "especially", "fig", "afraid", "huge", "sister", "steel", "discuss", "forward", "similar", "guide", "experience", "score", "apple", "bought", "led", "pitch", "coat", "mass", "card", "band", "rope", "slip", "win", "dream", "evening", "condition", "feed", "tool", "total", "basic", "smell", "valley"];
+    const mistakeSound = this.sound.add("wrong-answer");
+    const bgm = this.sound.add("bgm");
     this.WPMs = [];
     this.accuracies = [];
+    this.errorIcon = this.add.image(config.width/2,config.height/2,"redX");
+    this.errorIcon.scaleX = 0.1;
+    this.errorIcon.scaleY = 0.1;
+    this.errorIcon.setAlpha(0);
+    
     this.finishedEmitter = new Phaser.Events.EventEmitter();
            this.gameEnded = false;
           
         const mBackgrounds = this.add.graphics();
         mBackgrounds.fillStyle(0x2d2d2d, 0.5);
-       // const finishedEmitter = 
-        
         const marquee = (
           typingText,
           originX,
@@ -70,7 +80,6 @@ class gameplayScene extends Phaser.Scene{
           let keysPressed = 0;
           let accuratekeysPressed = 0;
           let spawningTime;  //we keep track of this to help determine the WPM the user is typing at
-          //console.log("Marquee was created: " + typingText);
           const amountOfWords = typingText.split(" ").length;
           if (this.currentTextObject) {
             console.log(
@@ -88,9 +97,6 @@ class gameplayScene extends Phaser.Scene{
               mBackgrounds.fillRect(originX, originY - fontsize/4, config.width, tween.getValue());
             }
           })
-          //const rect = new Phaser.Geom.Rectangle(originX, originY - fontsize/4, config.width, fontsize*1.5);
-          
-          //mBackgrounds.fillRectShape(rect);
           var typingTextDisplay = this.add.text(
             originX + config.width,
             originY,
@@ -123,7 +129,6 @@ class gameplayScene extends Phaser.Scene{
 
             const finishedTime = new Date();
             mBackgrounds.clear();
-            //rect.destroy();
             console.log("time to finish: " + finishedTime - spawningTime);
             const finalWPM =
               amountOfWords / ((finishedTime - spawningTime) / 60000);
@@ -167,37 +172,12 @@ class gameplayScene extends Phaser.Scene{
           };
           this.input.keyboard.on("keydown", keyPressHandler);
         };
-        //hard coded sample level
-        const timeline = this.add.timeline([
-          {
-            at: 1000,
-            run: () => {
-              marquee("The quick brown fox jumps over the lazy dog", 0, 30);
-            },
-          },
-          {
-            from: 9000,
-            run: () => {
-              marquee("My name is Nachooooooooooooooooooooo", 0, 300);
-            },
-          },
-          {
-            from: 9000,
-            run: () => {
-              marquee(
-                "Mississippi mississippi mississippi mississippi",
-                0,
-                500
-              );
-            },
-          },
-        ]);
         const generateString = (wordsAmount) => {
           let result = "";
 
           for (let pete = 0; pete < wordsAmount; pete++) {
             result = result.concat(
-              " " + words[Math.floor(Math.random() * words.length)]
+              " " + words[Math.floor(Math.random() * words.length)].toLowerCase()
             );
           }
           return result.substring(1);
@@ -208,7 +188,7 @@ class gameplayScene extends Phaser.Scene{
           let string = generateString(stringLength);
           let incrementalWPM = initialWPM;
           const again = () => {
-            incrementalWPM += 1;
+            incrementalWPM += 3;
             stringLength++;
             string = generateString(stringLength);
             marquee(
@@ -225,7 +205,10 @@ class gameplayScene extends Phaser.Scene{
             { wpm: incrementalWPM }
           );
           this.finishedEmitter.on("Mistake", ()=>{
-            //console.log("finishedEmitter activated")
+            /* Audio Visual Cue to indicate the mistake */
+            this.errorIcon.setAlpha(1);
+            mistakeSound.play();
+            console.log("You made a mistake >:-(");
             this.currentTextObject.x -= 15;
           })
           this.finishedEmitter.on("Finished", (WPM, accuracy) => {
@@ -234,17 +217,17 @@ class gameplayScene extends Phaser.Scene{
                this.WPMs.push(WPM);
                 this.accuracies.push(accuracy); 
               this.modal("WPM: " + Math.floor(WPM) + " Accuracy: " + Math.floor(accuracy*100) + "%", 3000, again);
-          
             }
             });
         };
-        
         const startGame = () => {
           console.log("startGame");
           this.modal("Get ready!",3000,()=>{
             infiniteMode(this.wpm * 0.9);
           })
         }
+        bgm.loop = true;
+        bgm.play();
         startGame();
 
       }
@@ -252,6 +235,9 @@ class gameplayScene extends Phaser.Scene{
       update(time, delta) {
         
         let f = 1000 / 60 / delta;
+        if (this.errorIcon.alpha > 0){
+          this.errorIcon.alpha -= 0.05;
+        }
         if (this.currentTextObject) {
           this.currentTextObject.x -= f * this.currentTextObject.speed;
           if (this.currentTextObject.x < -100 && !this.gameEnded) {

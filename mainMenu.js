@@ -12,7 +12,7 @@ class menuScene extends Phaser.Scene{
         console.log("Main Menu Scene");
         let WPM = 60;
         const lowWPM = 10;
-        const highWPM = 300;
+        const highWPM = 120;
         const title = this.add.text(350,20,"MACH TYPE TYPE TYPE", {fontFamily:"Calibri", fontSize:"40px"});
         const WPMSelector = this.add.sprite(500,200,'WPMSelector');
         WPMSelector.setInteractive({draggable:true});

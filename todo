@@ -1,6 +1,10 @@
 ending screen DONE
-fullscreen option
+fullscreen option DONE
 difficulty level (WPM of letters is WPM of user *0.75) DONE
 "|" confusing
-
+ 
+ audiovisual cue when mistake is made DONE
+ level up message (what do we want to do with this)
+ change WPM to "starting WPM" on the menu screen
+ WPM slider persists between games
 Phaser starts scenes in reverse order and I don't know what to do RESOLVED
