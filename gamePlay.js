@@ -57,7 +57,7 @@ class gameplayScene extends Phaser.Scene{
   create() {
     //put these somewhere else?
     const mistakeSound = this.sound.add("wrong-answer");
-    const bgm = this.sound.add("bgm");
+    this.bgm = this.sound.add("bgm");
     this.WPMs = [];
     this.accuracies = [];
     this.errorIcon = this.add.image(config.width/2,config.height/2,"redX");
@@ -226,8 +226,11 @@ class gameplayScene extends Phaser.Scene{
             infiniteMode(this.wpm * 0.9);
           })
         }
-        bgm.loop = true;
-        bgm.play();
+        this.bgm.loop = true;
+
+          this.bgm.play();
+        
+        
         startGame();
 
       }
@@ -260,7 +263,8 @@ class gameplayScene extends Phaser.Scene{
                 message = "It seems like this was too hard for you! Try a slower speed?"
             }
             this.modal(message,5000,()=>{
-                this.scene.start("menuScene")
+                this.bgm.destroy();
+                this.scene.start("menuScene");
             });
           }
         }
