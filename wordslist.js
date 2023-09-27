@@ -1118,5 +1118,13 @@ const words = [
     'Young',
     'Your',
     'Yourself',
+    'Zeta',
+    'Zombie',
+    'Zenith',
+    'Zectacular',
+    'Gundam',
+    'Mach Five',
+    'Lupin',
+    'Geass',
   ];
   

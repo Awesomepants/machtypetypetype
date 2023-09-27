@@ -264,7 +264,7 @@ class gameplayScene extends Phaser.Scene{
             }
             this.modal(message,5000,()=>{
                 this.bgm.destroy();
-                this.scene.start("menuScene");
+                this.scene.start("menuScene",{wpm:this.wpm});
             });
           }
         }

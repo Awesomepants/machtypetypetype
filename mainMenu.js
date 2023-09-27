@@ -7,10 +7,19 @@ class menuScene extends Phaser.Scene{
         this.load.image("WPMSelector","button.png");
         this.load.image("fullscreen","full-screen-button.png");
     }
-    init(){}
+    init(data){
+       if(data.wpm){
+        this.wpm = data.wpm;
+       }
+    }
     create(){
         console.log("Main Menu Scene");
-        let WPM = 60;
+        let WPM;
+        if(this.wpm){
+             WPM = this.wpm;
+        } else {
+            WPM = 60;
+        }
         const lowWPM = 10;
         const highWPM = 120;
         const title = this.add.text(350,20,"MACH TYPE TYPE TYPE", {fontFamily:"Calibri", fontSize:"40px"});
