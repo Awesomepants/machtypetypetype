@@ -6,6 +6,9 @@ class menuScene extends Phaser.Scene{
     preload(){
         this.load.image("WPMSelector","button.png");
         this.load.image("fullscreen","full-screen-button.png");
+        this.load.image("background","menuImage.jpg");
+        this.load.audio("MenuBgm","POL-raw-power-long.wav");
+        this.load.image("paintSplatter","paintsplatter.png");
     }
     init(data){
        if(data.wpm){
@@ -20,8 +23,16 @@ class menuScene extends Phaser.Scene{
         } else {
             WPM = 60;
         }
+        this.background = this.add.image(0,100,"background");
+        this.backgroundScrollingSpeedX = (Math.random() - 0.5) * 20;//Math.floor(Math.random - 0.5) * 10;
+        //console.log();
         const lowWPM = 10;
         const highWPM = 120;
+        this.bgm = this.sound.add("MenuBgm");
+        this.bgm.loop = true;
+        this.bgm.play();
+        const splatter1 = this.add.image(540,70,"paintSplatter");
+        splatter1.scale = 0.7;
         const title = this.add.text(350,20,"MACH TYPE TYPE TYPE", {fontFamily:"Calibri", fontSize:"40px"});
         const WPMSelector = this.add.sprite(500,200,'WPMSelector');
         WPMSelector.setInteractive({draggable:true});
@@ -63,8 +74,23 @@ class menuScene extends Phaser.Scene{
           );
           this.input.keyboard.on('keydown',()=>{
             console.log("uwu");
+            this.bgm.destroy();
             this.scene.start("gameplayScene", {wpm:WPM});
           });
     }
-    update(){}
+    update(){
+        this.background.x += this.backgroundScrollingSpeedX;
+        //console.log(this.backgroundScrollingSpeedX);
+        if(this.background.x < 0|| this.background.x > config.width || Math.abs(this.backgroundScrollingSpeedX) < 4){
+            this.background.x = Math.random() * config.width;
+            this.backgroundScrollingSpeedX = (Math.random() - 0.5) * 20;
+            console.log(this.backgroundScrollingSpeedX);
+
+        }
+        if(!(this.background.y < 200 || this.background.y > 400)){
+            this.background.y += Math.floor((Math.random() - 0.5) * 5);
+        } else {
+            this.background.y = 300;
+        }
+    }
 }

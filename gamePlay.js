@@ -12,7 +12,7 @@ class gameplayScene extends Phaser.Scene{
   preload(){
     this.load.image("redX","redX.png");
     this.load.audio("wrong-answer","wrong-answer.wav");
-    this.load.audio("bgm","POL-net-bots-short.wav");
+    this.load.audio("bgm","POL-mission-cobra-long.wav");
   }
   modal(modalText, miliseconds, andThen){
     //is this creating a new graphics object every time this function is called?!?!?! We need to change this at some point

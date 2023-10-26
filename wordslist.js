@@ -863,8 +863,6 @@ const words = [
     'Set',
     'Seven',
     'Several',
-    'Sex',
-    'Sexual',
     'Shake',
     'Share',
     'She',
