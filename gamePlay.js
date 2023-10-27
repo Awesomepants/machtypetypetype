@@ -70,10 +70,7 @@ class gameplayScene extends Phaser.Scene{
     this.WPMs = [];
     this.waves = 0;
     this.accuracies = [];
-    this.errorIcon = this.add.image(config.width/2,config.height/2,"redX");
-    this.errorIcon.scaleX = 0.1;
-    this.errorIcon.scaleY = 0.1;
-    this.errorIcon.setAlpha(0);
+    
     
     this.finishedEmitter = new Phaser.Events.EventEmitter();
            this.gameEnded = false;
@@ -217,10 +214,18 @@ class gameplayScene extends Phaser.Scene{
           );
           this.finishedEmitter.on("Mistake", ()=>{
             /* Audio Visual Cue to indicate the mistake */
+            this.errorIcon.text = this.currentTextObject.text[1].toUpperCase();
+            this.errorIcon.x = config.width/2 - 100;
+            if(this.errorIcon.text === " "){
+              this.errorIcon.text = "SPACE"
+              this.errorIcon.x = 0;
+            }
             this.errorIcon.setAlpha(1);
             mistakeSound.play();
             console.log("You made a mistake >:-(");
-            this.currentTextObject.x -= 15;
+              this.currentTextObject.x -= 5;
+            
+            
           })
           this.finishedEmitter.on("Finished", (WPM, accuracy) => {
             
@@ -256,7 +261,8 @@ class gameplayScene extends Phaser.Scene{
 
           this.bgm.play();
         
-        
+          this.errorIcon = this.add.text(config.width/2 - 100,50,"X",{ fontFamily:'Tahoma',fontSize: "400px", fill: "red" });
+          this.errorIcon.setAlpha(0);
         startGame();
 
       }
@@ -264,8 +270,9 @@ class gameplayScene extends Phaser.Scene{
       update(time, delta) {
         
         let f = 1000 / 60 / delta;
+        //un-comment this once we are happy with placement
         if (this.errorIcon.alpha > 0){
-          this.errorIcon.alpha -= 0.05;
+          this.errorIcon.alpha -= 0.01;
         }
         
         if (this.currentTextObject) {

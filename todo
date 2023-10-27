@@ -1,11 +1,14 @@
  TODO
  add proper credits for the music lol
- when you make a mistake, you have a short grace window and instead of an "X" flashing on screen, the key you should have typed instead flashes
+ when you make a mistake, you have a short grace window
  particle effects to look like tire rubber coming off of the | cursor
 (Idea: ) Competitive levels for online leaderboards, maybe Normal (60wpm), Intermediate (80wpm), and expert (100wpm), so that there's not a million leaderboards lol
-build with webpack (?)
+make sure the timing is right and it's based on delta rather than the amount of frames
+add with loading screen
+uglify or smthn for production use
 
 DONE
+instead of an "X" flashing on screen, the key you should have typed instead flashes
 change WPM to "starting WPM" on the menu screen
 make death long enough to be screenshottable
 test on firefox

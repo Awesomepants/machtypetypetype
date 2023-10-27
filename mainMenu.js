@@ -4,6 +4,21 @@ class menuScene extends Phaser.Scene{
         super({ key: 'menuScene' });
     }
     preload(){
+        var progress = this.add.graphics();
+        const reassurance = this.add.text(config.width/2,400,"Loading...")
+        this.load.on('progress', function (value) {
+
+            progress.clear();
+            progress.fillStyle(0xffffff, 1);
+            progress.fillRect(0, 270, 800 * value, 60);
+
+        });
+
+        this.load.on('complete', function () {
+
+            progress.destroy();
+
+        });
         this.load.image("WPMSelector","button.png");
         this.load.image("fullscreen","full-screen-button.png");
         this.load.image("background","menuImage.jpg");
