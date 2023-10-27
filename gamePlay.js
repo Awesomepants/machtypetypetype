@@ -13,7 +13,8 @@ class gameplayScene extends Phaser.Scene{
     
     this.load.audio("wrong-answer","wrong-answer.wav");
     this.load.audio("bgm","POL-mission-cobra-long.mp3");
-    this.load.image("racetrack","racetrack.jpg")
+    this.load.image("racetrack","racetrack.jpg");
+    this.load.image("superFast","SuperFast.png")
   }
   modal(modalText, miliseconds, andThen){
     //is this creating a new graphics object every time this function is called?!?!?! We need to change this at some point
@@ -60,6 +61,10 @@ class gameplayScene extends Phaser.Scene{
     const mistakeSound = this.sound.add("wrong-answer");
     this.bgm = this.sound.add("bgm");
     this.bg = this.add.image(config.width/2, config.height/2, "racetrack");
+    this.superFast = this.add.image(config.width/2, 150, "superFast");
+    this.superFastScale = 0.25;
+    this.superFast.scale = this.superFastScale;
+    this.superFast.setAlpha(0);
     this.minbgscale = 0.6;
     this.bg.scale = this.minbgscale;
     this.WPMs = [];
@@ -192,6 +197,7 @@ class gameplayScene extends Phaser.Scene{
           let string = generateString(stringLength);
           let incrementalWPM = initialWPM;
           const again = () => {
+            this.superFast.setAlpha(0);
             incrementalWPM += 3;
             stringLength++;
             string = generateString(stringLength);
@@ -219,6 +225,16 @@ class gameplayScene extends Phaser.Scene{
             this.bg.scale = this.minbgscale;
             this.bg.x = config.width/2;
             this.bg.y = config.height/2;
+            this.superFast.setAlpha(1);
+            this.tweens.addCounter({
+              from: 2,
+              to: this.superFastScale,
+              duration: 500,
+              onUpdate: (tween) => {
+                console.log(tween);
+                this.superFast.scale = tween.getValue();
+              }
+            })
             if(!this.gameEnded){
                this.WPMs.push(WPM);
                 this.accuracies.push(accuracy); 
@@ -256,7 +272,6 @@ class gameplayScene extends Phaser.Scene{
             this.bg.y += (Math.random() - 0.5) * 4;
           }
           
-          console.log(this.bg.scale);
           this.currentTextObject.x -= f * this.currentTextObject.speed;
           if (this.currentTextObject.x < -100 && !this.gameEnded) {
             this.gameEnded = true;
