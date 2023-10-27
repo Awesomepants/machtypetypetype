@@ -68,6 +68,7 @@ class gameplayScene extends Phaser.Scene{
     this.minbgscale = 0.6;
     this.bg.scale = this.minbgscale;
     this.WPMs = [];
+    this.waves = 0;
     this.accuracies = [];
     this.errorIcon = this.add.image(config.width/2,config.height/2,"redX");
     this.errorIcon.scaleX = 0.1;
@@ -222,6 +223,7 @@ class gameplayScene extends Phaser.Scene{
             this.currentTextObject.x -= 15;
           })
           this.finishedEmitter.on("Finished", (WPM, accuracy) => {
+            
             this.bg.scale = this.minbgscale;
             this.bg.x = config.width/2;
             this.bg.y = config.height/2;
@@ -236,6 +238,7 @@ class gameplayScene extends Phaser.Scene{
               }
             })
             if(!this.gameEnded){
+               this.waves ++;
                this.WPMs.push(WPM);
                 this.accuracies.push(accuracy); 
               this.modal("WPM: " + Math.floor(WPM) + " Accuracy: " + Math.floor(accuracy*100) + "%", 3000, again);
@@ -292,9 +295,26 @@ class gameplayScene extends Phaser.Scene{
             } else {
                 message = "It seems like this was too hard for you! Try a slower speed?"
             }
-            this.modal(message,5000,()=>{
-                this.bgm.destroy();
+            const exitToMenu = () => {
+              this.bgm.destroy();
                 this.scene.start("menuScene",{wpm:this.wpm});
+            }
+            this.modal(message,5000,()=>{
+                if(averageWPM){
+                  const highscore = parseFloat(localStorage.getItem(`${this.wpm}`));
+                  let highscoremsg = "";
+                  console.log(highscore);
+                  if(this.waves > highscore){
+                    highscoremsg =  `New High Score for ${this.wpm}WPM!`;
+                    localStorage.setItem(`${this.wpm}`,`${this.waves}`)
+                  }
+                  this.modal(`You survived for ${this.waves} waves. ${highscoremsg}`,5000,()=>{
+                    exitToMenu();
+                  });
+                } else {
+                  exitToMenu();
+                }
+                
             });
           }
         }

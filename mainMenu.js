@@ -44,15 +44,28 @@ class menuScene extends Phaser.Scene{
         title.scale = 0.45;
         const WPMSelector = this.add.sprite(500,250,'WPMSelector');
         WPMSelector.setInteractive({draggable:true});
-        const wpmDisplay = this.add.text(350,150,`WPM: ${WPM} (Drag to adjust)`,{fontFamily:"Calibri", fontSize:"30px"} );
+        const highScoreDisplay = this.add.text(50, 130, '',{fontFamily:"Calibri", fontSize:"30px"});
+        const InitialHighScore = localStorage.getItem(`${WPM}`);
+            if(InitialHighScore != null){
+                highScoreDisplay.text = `Your High Score: ${InitialHighScore}`
+            } else {
+                highScoreDisplay.text = "";
+            }
+        const wpmDisplay = this.add.text(350,150,`Your WPM: ${WPM} (Drag to adjust)`,{fontFamily:"Calibri", fontSize:"30px"} );
         this.input.on("drag",(pointer,gameObject,dragX) => {
             const padding = 300;
             dragX=Phaser.Math.Clamp(dragX, padding, config.width-padding);
             gameObject.x = dragX;
             WPM = Math.floor((highWPM-lowWPM) * (((dragX-padding))/(config.width-padding*2)) + lowWPM);
             console.log(WPM);
-            wpmDisplay.text = `WPM: ${WPM} (Drag to adjust)`;
+            wpmDisplay.text = `Your WPM: ${WPM} (Drag to adjust)`;
             wpmDisplay.updateText();
+            const highScore = localStorage.getItem(`${WPM}`);
+            if(highScore != null){
+                highScoreDisplay.text = `Your High Score: ${highScore}`
+            } else {
+                highScoreDisplay.text = "";
+            }
         })
         const button = this.add.image(config.width - 20, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
         button.setScale(0.15);
@@ -81,6 +94,11 @@ class menuScene extends Phaser.Scene{
             {fontSize:"30px",color:"white",fontFamily:"Trebuchet MS"}
           );
           this.input.keyboard.on('keydown',()=>{
+            if(!localStorage.getItem(`${WPM}`)){
+                console.log("Creating a local Storage item for this WPM speed");
+                localStorage.setItem(`${WPM}`,'0');
+            }
+            
             console.log("uwu");
             this.bgm.destroy();
             this.scene.start("gameplayScene", {wpm:WPM});

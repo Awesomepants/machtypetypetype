@@ -1,12 +1,15 @@
-"|" confusing
+ TODO
  add proper credits for the music lol
- level up message (what do we want to do with this)
- change WPM to "starting WPM" on the menu screen
-load assets once when the game is started rather than every time a scene starts!
-make main menu laid out nicer
-make death long enough to be screenshottable
-add movies in the background to make visuals more interesting
+ when you make a mistake, you have a short grace window and instead of an "X" flashing on screen, the key you should have typed instead flashes
+ particle effects to look like tire rubber coming off of the | cursor
+(Idea: ) Competitive levels for online leaderboards, maybe Normal (60wpm), Intermediate (80wpm), and expert (100wpm), so that there's not a million leaderboards lol
+build with webpack (?)
 
+DONE
+change WPM to "starting WPM" on the menu screen
+make death long enough to be screenshottable
+test on firefox
+record most waves survived per wpm
  audiovisual cue when mistake is made DONE
  ending screen DONE
 fullscreen option DONE
