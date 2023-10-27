@@ -216,12 +216,14 @@ class gameplayScene extends Phaser.Scene{
             this.currentTextObject.x -= 15;
           })
           this.finishedEmitter.on("Finished", (WPM, accuracy) => {
-            
+            this.bg.scale = this.minbgscale;
+            this.bg.x = config.width/2;
+            this.bg.y = config.height/2;
             if(!this.gameEnded){
                this.WPMs.push(WPM);
                 this.accuracies.push(accuracy); 
               this.modal("WPM: " + Math.floor(WPM) + " Accuracy: " + Math.floor(accuracy*100) + "%", 3000, again);
-              this.bg.scale = 1;
+              //this.bg.scale = 1;
             }
             });
         };
@@ -249,7 +251,9 @@ class gameplayScene extends Phaser.Scene{
         
         if (this.currentTextObject) {
           if(this.bg.scale < 1){
-            this.bg.scale += 0.0002;
+            this.bg.scale += 0.0005;
+            this.bg.x += (Math.random() - 0.5) * 4;
+            this.bg.y += (Math.random() - 0.5) * 4;
           }
           
           console.log(this.bg.scale);
