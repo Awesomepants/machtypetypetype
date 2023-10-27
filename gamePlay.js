@@ -78,7 +78,7 @@ class gameplayScene extends Phaser.Scene{
            this.gameEnded = false;
           
         const mBackgrounds = this.add.graphics();
-        mBackgrounds.fillStyle(0x2d2d2d, 0.5);
+        mBackgrounds.fillStyle(0x2d2d2d, 0.7);
         const marquee = (
           typingText,
           originX,
