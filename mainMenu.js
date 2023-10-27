@@ -5,7 +5,7 @@ class menuScene extends Phaser.Scene{
     }
     preload(){
         var progress = this.add.graphics();
-        const reassurance = this.add.text(config.width/2,400,"Loading...")
+        const reassurance = this.add.text(config.width/2,400,"Loading...",{fontFamily:"Calibri", fontSize:"30px"})
         this.load.on('progress', function (value) {
 
             progress.clear();
@@ -15,7 +15,7 @@ class menuScene extends Phaser.Scene{
         });
 
         this.load.on('complete', function () {
-
+            reassurance.destroy();
             progress.destroy();
 
         });
@@ -24,12 +24,13 @@ class menuScene extends Phaser.Scene{
         this.load.image("background","menuImage.jpg");
         this.load.audio("MenuBgm","POL-raw-power-long.mp3");
         this.load.image("paintSplatter","paintsplatter.png");
-        this.load.image("redX","redX.png");
         this.load.audio("wrong-answer","wrong-answer.wav");
         this.load.audio("bgm","POL-mission-cobra-long.mp3");
         this.load.image("logo","Logo.png");
         this.load.image("racetrack","racetrack.jpg");
         this.load.image("superFast","SuperFast.png");
+        this.load.audio("stinger","POL-mission-cobra-stinger.mp3");
+        this.load.audio("keyboard","keyboard.mp3");
     }
     init(data){
        if(data.wpm){

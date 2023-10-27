@@ -14,7 +14,9 @@ class gameplayScene extends Phaser.Scene{
     this.load.audio("wrong-answer","wrong-answer.wav");
     this.load.audio("bgm","POL-mission-cobra-long.mp3");
     this.load.image("racetrack","racetrack.jpg");
-    this.load.image("superFast","SuperFast.png")
+    this.load.image("superFast","SuperFast.png");
+    this.load.audio("stinger","POL-mission-cobra-stinger.mp3");
+    this.load.audio("keyboard","keyboard.mp3");
   }
   modal(modalText, miliseconds, andThen){
     //is this creating a new graphics object every time this function is called?!?!?! We need to change this at some point
@@ -59,7 +61,9 @@ class gameplayScene extends Phaser.Scene{
   create() {
     //put these somewhere else?
     const mistakeSound = this.sound.add("wrong-answer");
+    this.keyboardSound = this.sound.add("keyboard");
     this.bgm = this.sound.add("bgm");
+    this.stinger = this.sound.add("stinger");
     this.bg = this.add.image(config.width/2, config.height/2, "racetrack");
     this.superFast = this.add.image(config.width/2, 150, "superFast");
     this.superFastScale = 0.25;
@@ -76,7 +80,7 @@ class gameplayScene extends Phaser.Scene{
            this.gameEnded = false;
           
         const mBackgrounds = this.add.graphics();
-        mBackgrounds.fillStyle(0x2d2d2d, 0.7);
+        mBackgrounds.fillStyle(0x2d2d2d, 0.9);
         const marquee = (
           typingText,
           originX,
@@ -157,6 +161,7 @@ class gameplayScene extends Phaser.Scene{
             if (keyPress.key === typingTextDisplay.text[1]) {
               accuratekeysPressed++;
               keysPressed++;
+              this.keyboardSound.play();
               //console.log("Key Press Listener is listening");
               typingTextDisplay.setText(
                 "|" + typingTextDisplay.text.substring(2)
@@ -232,7 +237,9 @@ class gameplayScene extends Phaser.Scene{
             this.bg.scale = this.minbgscale;
             this.bg.x = config.width/2;
             this.bg.y = config.height/2;
-            this.superFast.setAlpha(1);
+            
+            if(!this.gameEnded){
+              this.superFast.setAlpha(1);
             this.tweens.addCounter({
               from: 2,
               to: this.superFastScale,
@@ -242,7 +249,6 @@ class gameplayScene extends Phaser.Scene{
                 this.superFast.scale = tween.getValue();
               }
             })
-            if(!this.gameEnded){
                this.waves ++;
                this.WPMs.push(WPM);
                 this.accuracies.push(accuracy); 
@@ -284,6 +290,13 @@ class gameplayScene extends Phaser.Scene{
           
           this.currentTextObject.x -= f * this.currentTextObject.speed;
           if (this.currentTextObject.x < -100 && !this.gameEnded) {
+            this.tweens.add({
+              targets: this.bgm,
+              volume: 0,
+              duration: 500
+            })
+            
+            this.stinger.play();
             this.gameEnded = true;
             this.finishedEmitter.emit("loss");
             console.log("running this code again...");
