@@ -13,7 +13,8 @@ class menuScene extends Phaser.Scene{
         this.load.audio("wrong-answer","wrong-answer.wav");
         this.load.audio("bgm","POL-mission-cobra-long.mp3");
         this.load.image("logo","Logo.png");
-        this.load.image("racetrack","racetrack.jpg")
+        this.load.image("racetrack","racetrack.jpg");
+        this.load.image("superFast","SuperFast.png");
     }
     init(data){
        if(data.wpm){
