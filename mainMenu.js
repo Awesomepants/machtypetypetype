@@ -7,8 +7,13 @@ class menuScene extends Phaser.Scene{
         this.load.image("WPMSelector","button.png");
         this.load.image("fullscreen","full-screen-button.png");
         this.load.image("background","menuImage.jpg");
-        this.load.audio("MenuBgm","POL-raw-power-long.wav");
+        this.load.audio("MenuBgm","POL-raw-power-long.mp3");
         this.load.image("paintSplatter","paintsplatter.png");
+        this.load.image("redX","redX.png");
+        this.load.audio("wrong-answer","wrong-answer.wav");
+        this.load.audio("bgm","POL-mission-cobra-long.mp3");
+        this.load.image("logo","Logo.png");
+        this.load.image("racetrack","racetrack.jpg")
     }
     init(data){
        if(data.wpm){
@@ -31,12 +36,14 @@ class menuScene extends Phaser.Scene{
         this.bgm = this.sound.add("MenuBgm");
         this.bgm.loop = true;
         this.bgm.play();
-        const splatter1 = this.add.image(540,70,"paintSplatter");
-        splatter1.scale = 0.7;
-        const title = this.add.text(350,20,"MACH TYPE TYPE TYPE", {fontFamily:"Calibri", fontSize:"40px"});
-        const WPMSelector = this.add.sprite(500,200,'WPMSelector');
+        const splatter1 = this.add.image(540,170,"paintSplatter");
+        splatter1.scale = 2;
+        //const title = this.add.text(350,20,"MACH TYPE TYPE TYPE", {fontFamily:"Calibri", fontSize:"40px"});
+        const title = this.add.image(520, 100, "logo");
+        title.scale = 0.45;
+        const WPMSelector = this.add.sprite(500,250,'WPMSelector');
         WPMSelector.setInteractive({draggable:true});
-        const wpmDisplay = this.add.text(350,70,`WPM: ${WPM} (Drag to adjust)`,{fontFamily:"Calibri", fontSize:"30px"} );
+        const wpmDisplay = this.add.text(350,150,`WPM: ${WPM} (Drag to adjust)`,{fontFamily:"Calibri", fontSize:"30px"} );
         this.input.on("drag",(pointer,gameObject,dragX) => {
             const padding = 300;
             dragX=Phaser.Math.Clamp(dragX, padding, config.width-padding);
@@ -46,8 +53,8 @@ class menuScene extends Phaser.Scene{
             wpmDisplay.text = `WPM: ${WPM} (Drag to adjust)`;
             wpmDisplay.updateText();
         })
-        const button = this.add.image(config.width - 50, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
-        button.setScale(0.2);
+        const button = this.add.image(config.width - 20, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+        button.setScale(0.15);
 
         button.on('pointerup', function ()
         {

@@ -10,9 +10,10 @@ class gameplayScene extends Phaser.Scene{
     this.wpm = data.wpm
   }
   preload(){
-    this.load.image("redX","redX.png");
+    
     this.load.audio("wrong-answer","wrong-answer.wav");
-    this.load.audio("bgm","POL-mission-cobra-long.wav");
+    this.load.audio("bgm","POL-mission-cobra-long.mp3");
+    this.load.image("racetrack","racetrack.jpg")
   }
   modal(modalText, miliseconds, andThen){
     //is this creating a new graphics object every time this function is called?!?!?! We need to change this at some point
@@ -58,6 +59,9 @@ class gameplayScene extends Phaser.Scene{
     //put these somewhere else?
     const mistakeSound = this.sound.add("wrong-answer");
     this.bgm = this.sound.add("bgm");
+    this.bg = this.add.image(config.width/2, config.height/2, "racetrack");
+    this.minbgscale = 0.6;
+    this.bg.scale = this.minbgscale;
     this.WPMs = [];
     this.accuracies = [];
     this.errorIcon = this.add.image(config.width/2,config.height/2,"redX");
@@ -217,6 +221,7 @@ class gameplayScene extends Phaser.Scene{
                this.WPMs.push(WPM);
                 this.accuracies.push(accuracy); 
               this.modal("WPM: " + Math.floor(WPM) + " Accuracy: " + Math.floor(accuracy*100) + "%", 3000, again);
+              this.bg.scale = 1;
             }
             });
         };
@@ -241,7 +246,13 @@ class gameplayScene extends Phaser.Scene{
         if (this.errorIcon.alpha > 0){
           this.errorIcon.alpha -= 0.05;
         }
+        
         if (this.currentTextObject) {
+          if(this.bg.scale < 1){
+            this.bg.scale += 0.0002;
+          }
+          
+          console.log(this.bg.scale);
           this.currentTextObject.x -= f * this.currentTextObject.speed;
           if (this.currentTextObject.x < -100 && !this.gameEnded) {
             this.gameEnded = true;

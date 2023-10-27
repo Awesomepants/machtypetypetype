@@ -9,7 +9,7 @@ var config = {
           parent: 'phaser-example',
           autoCenter: Phaser.Scale.CENTER_BOTH
       },
-        //scene: [menuScene, gameplayScene],
+        //scene: [gameplayScene, menuScene],
         scene: [menuScene, gameplayScene]
       };
 
